@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.homefood.dao.BoardDao">
+	<insert id="saveBoard" parameterType="com.naver.homefood.vo.Board"
+		useGeneratedKeys="true" keyProperty="boardSeq">
+		INSERT INTO
+		board
+		(seller_id,
+		title,
+		content,
+		location,
+		posting_date,
+		update_date)
+		VALUES(
+		#{sellerId},
+		#{title},
+		#{content},
+		#{location},
+		#{postingDate},
+		#{updateDate}
+		);
+	</insert>
+
+	<select id="getBoardList" resultType="com.naver.homefood.vo.Board"
+		parameterType="HashMap">
+		SELECT
+		board_seq,
+		seller_id,
+		title,
+		content,
+		location,
+		posting_date,
+		update_date
+		FROM board
+		ORDER BY board_seq
+		LIMIT #{offset},
+		#{count}
+	</select>
+
+	<delete id="deleteBoard">
+		DELETE
+		FROM
+		board
+		WHERE
+		board_seq = #{boardSeq}
+	</delete>
+
+	<update id="updateBoard" parameterType="com.naver.homefood.vo.Board">
+		UPDATE
+		board
+		SET
+		title =
+		#{title}
+		, content = #{content}
+		, location = #{location}
+		, update_date =
+		#{updateDate}
+		WHERE
+		board_seq = #{boardSeq}
+	</update>
+
+	<select id="getBoardDetail" resultType="com.naver.homefood.vo.Board">
+		SELECT
+		board_seq,
+		seller_id,
+		title,
+		content,
+		location,
+		posting_date,
+		update_date
+		FROM board
+		WHERE
+		board_seq = #{boardSeq}
+	</select>
+
+	<select id="getBoardCount" resultType="Integer">
+		SELECT
+		COUNT(*)
+		FROM
+		board
+	</select>
+
+	<select id="selectUserInfo" resultType="com.naver.homefood.vo.User">
+		SELECT
+		location
+		FROM
+		user
+		WHERE
+		id = #{id}
+	</select>
+</mapper> 

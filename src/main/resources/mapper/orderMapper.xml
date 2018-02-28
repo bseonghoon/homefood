@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.homefood.dao.OrderDao">
+	<insert id="insertOrderInfo" parameterType="com.naver.homefood.vo.OrderInfo"
+		useGeneratedKeys="true" keyProperty="orderSeq">
+		INSERT INTO
+		order_info
+		(
+		order_seq
+		, board_seq
+		, consumer_id
+		)
+		VALUES(
+		#{orderSeq}
+		,#{boardSeq}
+		,#{consumerId}
+		)
+	</insert>
+	<insert id="insertOrderFood" parameterType="com.naver.homefood.vo.OrderFood">
+		INSERT INTO
+		order_food
+		(
+		order_seq,
+		food_number,
+		order_count
+		)
+		VALUES(
+		#{orderSeq}
+		,#{foodNumber}
+		,#{orderCount}
+		)
+	</insert>
+	<select id="selectOrderInfo" resultType="hashMap">
+		   SELECT 
+            Oinfo.order_seq AS 'orderSeq'
+            , Oinfo.board_seq AS 'boardSeq'
+            ,food_name AS 'foodName'
+            , order_count AS 'orderCount'
+            , price
+            , seller_id AS 'id'
+            , order_status AS 'orderStatus'
+        FROM
+            order_info Oinfo
+                INNER JOIN
+            order_food Ofood ON Oinfo.order_seq = Ofood.order_seq
+                INNER JOIN
+            food ON Oinfo.board_seq = food.board_seq
+                AND Ofood.food_number = food.number
+                INNER JOIN
+            board ON Oinfo.board_seq = board.board_seq
+        WHERE
+            consumer_id = #{consumerId}
+        ORDER BY Oinfo.order_seq DESC
+        LIMIT #{offset}, #{count}
+	</select>
+	<select id="selectOrderInfoCount" resultType="Integer">
+		SELECT COUNT(*)
+		FROM
+            order_info Oinfo
+                INNER JOIN
+            order_food Ofood ON Oinfo.order_seq = Ofood.order_seq
+                INNER JOIN
+            food ON Oinfo.board_seq = food.board_seq
+                AND Ofood.food_number = food.number
+                INNER JOIN
+            board ON Oinfo.board_seq = board.board_seq
+        WHERE
+            consumer_id = #{consumerId}
+	</select>
+    <select id="selectSellerInfo" resultType="hashMap">
+                SELECT 
+            Oinfo.order_seq AS 'orderSeq'
+            , Oinfo.board_seq AS 'boardSeq'
+            ,food_name AS 'foodName'
+            , order_count AS 'orderCount'
+            , price
+            , consumer_id AS 'id'
+            , order_status AS 'orderStatus'
+        FROM
+            order_info Oinfo
+                INNER JOIN
+            order_food Ofood ON Oinfo.order_seq = Ofood.order_seq
+                INNER JOIN
+            food ON Oinfo.board_seq = food.board_seq
+                AND Ofood.food_number = food.number
+                INNER JOIN
+            board ON Oinfo.board_seq = board.board_seq
+        WHERE
+            seller_id = #{sellerId}
+        ORDER BY Oinfo.order_seq DESC
+        LIMIT #{offset}, #{count}
+    </select>
+    <select id="selectSellerOrderInfoCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM
+            order_info Oinfo
+                INNER JOIN
+            order_food Ofood ON Oinfo.order_seq = Ofood.order_seq
+                INNER JOIN
+            food ON Oinfo.board_seq = food.board_seq
+                AND Ofood.food_number = food.number
+                INNER JOIN
+            board ON Oinfo.board_seq = board.board_seq
+        WHERE
+            seller_id = #{sellerId}
+    </select>
+    <update id="updateOrderStatus">
+        UPDATE order_info
+        SET order_status = 'y'
+        WHERE order_seq = #{orderSeq}
+    </update>
+</mapper> 

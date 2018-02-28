@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.homefood.dao.ImageDao">
+	<insert id="saveImagePath">
+		INSERT INTO
+		image(
+		image_path,
+		board_seq,
+		profile,
+		number
+		)
+		VALUES(
+		#{imagePath}
+		,#{boardSeq}
+		,#{profile}
+		,#{number}
+		)
+	</insert>
+	<select id="getImage" resultType="com.naver.homefood.vo.Image">
+		SELECT
+		image_path,
+		board_seq,
+		number
+		FROM
+		image
+		WHERE
+		board_seq = #{boardSeq}
+	</select>
+	<select id="getProfileImagePath" resultType="com.naver.homefood.vo.Image">
+		SELECT
+		image_path,
+		board_seq
+		FROM
+		image
+		WHERE
+		board_seq = #{boardSeq}
+		AND profile = 'y'
+	</select>
+	<delete id="deleteImage">
+		DELETE
+		FROM
+		image
+		WHERE
+		board_seq = #{bodardSeq}
+	</delete>
+
+	<delete id="deleteImageOne" parameterType="HashMap">
+		/*
+		ImageDao.deleteImageOne */
+		DELETE
+		FROM
+		image
+		WHERE
+		board_seq = #{boardSeq}
+		AND number = #{number}
+	</delete>
+</mapper> 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.homefood.dao.FoodDao">
+	<insert id="insertFood" parameterType="com.naver.homefood.vo.Food">
+		INSERT INTO
+		food(
+			board_seq,
+			number,
+			food_name,
+			count,
+			gram,
+			price
+		)
+		VALUES(
+			#{boardSeq},
+			#{number},
+			#{foodName},
+			#{count},
+			#{gram},
+			#{price}
+		)
+	</insert>
+	<select id="selectFood" resultType="com.naver.homefood.vo.Food">
+		SELECT
+		board_seq,
+		number,
+		food_name,
+		count,
+		gram,
+		price
+		FROM
+		food
+		WHERE
+		board_seq = #{boardSeq}
+	</select>
+	<delete id="deleteFood">
+		DELETE FROM
+		food
+		WHERE
+		board_seq = #{boardSeq}
+	</delete>
+	<delete id="deleteOneFood" parameterType="HashMap">
+		delete from
+		food
+		where
+		board_seq = #{boardSeq}
+		AND number = #{number}
+	</delete>
+	<update id="updateFood" parameterType="com.naver.homefood.vo.Food">
+	   UPDATE food
+       <trim prefix="SET" suffixOverrides=",">
+	       <if test="foodName != ''">
+		       food_name = #{foodName},
+	       </if>
+           <if test="count gt 0">
+               count = #{count},
+           </if>
+	       <if test="gram gt 0">
+		       gram = #{gram},
+	       </if>
+	       <if test="price gt 0">
+		       price = #{price}
+	       </if>
+       </trim>
+       WHERE
+       board_seq = #{boardSeq}
+       AND number = #{number}
+	</update>
+	<update id="updateFoodCountByOrder" parameterType="com.naver.homefood.vo.Food">
+	   UPDATE food
+	   SET
+	   count = count - #{count}
+	   WHERE
+	   board_seq = #{boardSeq}
+       AND number = #{number}
+	</update>
+</mapper> 

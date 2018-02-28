@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naver.homefood.dao.SignDao">
+
+	<insert id="signUp" parameterType="com.naver.homefood.vo.User">
+		INSERT
+		INTO user(
+		id
+		,passwd
+		,type
+		,email
+		,location
+		)
+		VALUES(
+		#{id}
+		,#{passwd}
+		,#{type}
+		,#{email}
+		,#{location}
+		)
+	</insert>
+	<select id="signIn" parameterType="com.naver.homefood.vo.User" resultType="com.naver.homefood.vo.User">
+		SELECT id
+		,passwd
+		,type
+		,email
+		,location
+		FROM user
+		WHERE
+		id = #{id}
+		AND passwd = #{passwd}
+	</select>
+	<select id="overlapCheck" resultType="Integer">
+		SELECT count(*)
+		FROM
+		user
+		WHERE
+		id = #{id}
+	</select>
+</mapper>
